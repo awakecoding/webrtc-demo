@@ -1,0 +1,6 @@
+{
+  "stun":"stun:global.stun.twilio.com:3478",
+  "turn":"turn:global.turn.twilio.com:3478",
+  "username": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+  "credential": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+}
