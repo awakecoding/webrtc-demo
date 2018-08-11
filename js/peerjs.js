@@ -2349,11 +2349,14 @@
         pc.oniceconnectionstatechange = function() {
             switch (pc.iceConnectionState) {
                 case 'disconnected':
+                    util.log('iceConnectionState is disconnected');
+                    break;
                 case 'failed':
-                    util.log('iceConnectionState is disconnected, closing connections to ' + peerId);
+                    util.log('iceConnectionState is failed, closing connections to ' + peerId);
                     connection.close();
                     break;
                 case 'completed':
+                    util.log('iceConnectionState is completed');
                     pc.onicecandidate = util.noop;
                     break;
             }
