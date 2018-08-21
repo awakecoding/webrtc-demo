@@ -1,6 +1,7 @@
 var peer = null;
 var connection = null;
 var connected = false;
+var timer;
 
 function connect() {
     var stun = document.getElementById("stun").value;
@@ -29,7 +30,7 @@ function connect() {
     // When the connection with the peerServer is open
     peer.on('open', function (id) {
         console.log("Connection with the Peer Server is open.");
-        document.getElementById("id").innerHTML = "ID: <b>"+ id + "</b>";
+        document.getElementById("local_id").innerHTML = "Local ID: <b>"+ id + "</b>";
         //document.getElementById("disconnect_btn").disabled = false;
 
         // When a remote connects itself on me
@@ -45,8 +46,7 @@ function connect() {
 
                 connection = conn;
                 conn.on('data', function (data) {
-                    console.log("Data received from peer.");
-                    document.getElementById("msg").innerHTML += "Data received: " + data + "<br />";
+                    recv(data)
                 });
             });
         });
@@ -75,24 +75,32 @@ function connect_peer(){
 
         // When data is received from the remote peer
         connection.on('data', function (data) {
-            console.log("Data received from peer.");
-            document.getElementById("msg").innerHTML += "Data received: " + data + "<br />";
+            recv(data);
         });
     });
 }
 
 function send(){
-    document.getElementById("msg").innerHTML += "Data sent: " + document.getElementById("message").value + "<br />";
-    connection.send(document.getElementById("message").value);
+    var output = document.getElementById("output");
+    var input = document.getElementById("input").value;
+    output.innerHTML += "local: " + input + '\n';
+    output.scrollTop = output.scrollHeight;
+    connection.send(input);
+}
+
+function recv(data) {
+    var output = document.getElementById("output");
+    output.innerHTML += "remote: " + data + '\n';
+    output.scrollTop = output.scrollHeight;
 }
 
 function disconnect() {
     document.getElementById("connect_to_peer").style.display = "block";
     peer.disconnect();
     connection.close();
-    document.getElementById("id").innerHTML = "ID: ";
+    document.getElementById("local_id").innerHTML = "Local ID: ";
     document.getElementById("disconnect_btn").disabled = true;
-    document.getElementById("message").disabled = true;
+    document.getElementById("input").disabled = true;
     document.getElementById("send_button").disabled = true;
     document.getElementById("status").innerHTML = "Status: ";
 }
@@ -110,5 +118,15 @@ function load(){
     };
     xmlhttp.open("GET", "credentials.txt", true);
     xmlhttp.send();
+}
+
+function start_timer(){
+    var interval = document.getElementById("interval").value;
+    timer = setInterval(send, interval);
+}
+
+function stop_timer(){
+    clearInterval(timer);
+    timer = null;
 }
 

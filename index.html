@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-    <title>WebRTC with turn and stun server tester</title>
+    <title>WebRTC Demo</title>
     <meta charset="utf-8">
     <link rel="stylesheet" href="main.css" type="text/css" media="all">
     <script src="js/adapter.js"></script>
@@ -9,21 +9,23 @@
     <script src="js/main.js"></script>
 </head>
 <body onload="load()">
+
 <div style="width: 500px; margin: 0 auto; border: thin solid #b2b2b2; border-radius: 5px; position: relative; text-align: center;">
     <input type="text"  id="stun" style="width: 90%;height: 25px; font-size: 16px; margin-top: 15px;" placeHolder="Stun server" />
     <input type="text" id="turn" style="width: 90%;height: 25px; font-size: 16px; margin-top: 15px;" placeHolder="Turn server" />
     <input type="text" id="turn_user" style="width: 44%;height: 25px; font-size: 16px; margin-top: 15px;" placeHolder="Username" />
     <input type="text" id="turn_cred" style="width: 44%;height: 25px; font-size: 16px; margin-top: 15px;" placeHolder="Password" /><br />
+    <span style="display: block; width: 90%; text-align: left; font-size: 14px; padding-left: 20px; padding-top: 10px;">IceTransportPolicy: </span>
     <select id="transportPolicy" style="width: 92%; margin-top:10px; height: 25px;">
-        <option value="all" selected="selected">Select a policy..</option>
         <option value="all">All</option>
-        <option value="relay">Relay</option>
+        <option value="relay" selected="selected">Relay</option>
     </select>
-    <span id="id" style="display: block; width: 90%; text-align: left; font-size: 14px; padding-left: 20px; padding-top: 10px;">ID: </span>
+    <span id="local_id" style="display: block; width: 90%; text-align: left; font-size: 14px; padding-left: 20px; padding-top: 10px;">Local ID: </span>
     <button id="connectButton" onclick="connect()" name="connectButton" style="float: left; margin-left: 2px; margin-top: 15px; margin-bottom: 2px;">Connect</button>
     <button id="disconnect_btn" onclick="disconnect()" name="disconnectButton" name="connectButton" style="float: right; margin-right: 2px; margin-top: 15px; margin-bottom: 2px;" disabled>Disconnect</button>
     <div style="clear: both"></div>
 </div>
+
 <div id="connect_to_peer" style="width: 500px; margin: 25px auto; border: thin solid #b2b2b2; border-radius: 5px; position: relative; text-align: center;">
     <input type="text" id="remote_id" style="width: 90%;height: 25px; font-size: 16px; margin-top: 15px;" placeHolder="Remote ID" />
     <span id="status" style="display: block; width: 90%; text-align: left; font-size: 14px; padding-left: 23px; margin-top: 10px;">Status: </span>
@@ -32,15 +34,18 @@
 </div>
 
 <div style="width: 500px; margin: 25px auto; border: thin solid #b2b2b2; border-radius: 5px; position: relative; text-align: center;">
-    <span style="display: block; font-size: 18px; margin-top: 5px; margin-bottom: 10px;">Message: </span>
-    <textarea id="message" style="width: 91%; height: 75px; margin-top: 15px; resize: none; font-size: 14px;"></textarea>
+    <span style="display: block; font-size: 18px; margin-top: 5px; margin-bottom: 10px;">Input: </span>
+    <textarea id="input" style="width: 91%; height: 75px; margin-top: 15px; resize: none; font-size: 14px;"></textarea>
     <button id="send_button" onclick="send()" style="float: left; margin-left: 18px; margin-top: 10px; margin-bottom: 15px;">Send message</button>
+    <input type="text" id="interval" style="width: 90%;height: 25px; font-size: 16px; margin-top: 15px;" value="1000"/>
+    <button id="start_btn" onclick="start_timer()" style="float: left; margin-left: 18px; margin-top: 10px; margin-bottom: 15px;">Start timer</button>
+    <button id="stop_btn" onclick="stop_timer()" style="float: left; margin-left: 18px; margin-top: 10px; margin-bottom: 15px;">Stop timer</button>
     <div style="clear: both"></div>
 </div>
 
 <div style="width: 500px; margin: 25px auto; border: thin solid #b2b2b2; border-radius: 5px; position: relative; text-align: center;">
     <span style="display: block; font-size: 18px; margin-top: 5px; margin-bottom: 10px;">Output: </span>
-    <p id="msg" style="text-align: justify; width: 95%; margin: 0 auto; margin-bottom: 15px;">
+    <textarea id="output" style="text-align: justify; width: 95%; height: 200px; overflow: scroll; margin: 0 auto; margin-bottom: 15px;"></textarea>
 </div>
 
 <div style="width: 500px; margin: 25px auto; border: thin solid #b2b2b2; border-radius: 5px; position: relative; text-align: center;">
